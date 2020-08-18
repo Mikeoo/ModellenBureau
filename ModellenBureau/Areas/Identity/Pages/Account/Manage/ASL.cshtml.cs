@@ -14,16 +14,20 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
         public void OnGet()
         {
         }
+
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string _FirstName { get; set; }
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
-        public int Age { get; set; }
-        public string Street { get; set; }
-        public string ZipCode { get; set; }
+        public string _LastName { get; set; }
+        [Display(Name = "Age")]
+        public int _Age { get; set; }
+        [Display(Name = "Street")]
+        public string _Street { get; set; }
+        public string _ZipCode { get; set; }
         [Display(Name = "House Number")]
-        public int HouseNumber { get; set; }
-        public string City { get; set; }
+        public int _HouseNumber { get; set; }
+        [Display(Name = "City")]
+        public string _City { get; set; }
 
     }
 }

@@ -14,5 +14,7 @@ namespace ModellenBureau.Models
         public string ZipCode { get; set; }
         public int HouseNumber { get; set; }
         public string City { get; set; }
+
+
     }
 }
