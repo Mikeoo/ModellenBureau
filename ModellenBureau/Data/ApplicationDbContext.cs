@@ -13,8 +13,8 @@ namespace ModellenBureau.Data
             : base(options)
         {
         }
-        public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Model> Models { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Model> Models { get; set; }
 
 
     }
