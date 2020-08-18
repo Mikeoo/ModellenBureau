@@ -9,6 +9,8 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
     public static class ManageNavPages
     {
         public static string Index => "Index";
+        public static string ASL => "ASL";
+
 
         public static string Email => "Email";
 
@@ -25,6 +27,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
+        public static string ASLNavClass(ViewContext viewContext) => PageNavClass(viewContext, ASL);
 
         public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
 
