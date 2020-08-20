@@ -23,6 +23,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
         public int _Age { get; set; }
         [Display(Name = "Street")]
         public string _Street { get; set; }
+        [Display(Name = "Zip Code")]
         public string _ZipCode { get; set; }
         [Display(Name = "House Number")]
         public int _HouseNumber { get; set; }
