@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using ModellenBureau.Data;
 using ModellenBureau.Models;
 
 
@@ -17,15 +18,19 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
     public class ASLModel : PageModel
     {
 
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ASL> _userManager;
+        private readonly SignInManager<ASL> _signInManager;
+        private readonly ApplicationDbContext _db;
 
+        
         public ASLModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<ASL> userManager,
+            SignInManager<ASL> signInManager,
+            ApplicationDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _db = db;
         }
 
 

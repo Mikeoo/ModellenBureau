@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ModellenBureau.Models
 {
-    public class Model : ASL
+    public class Model
     {
         public int Id { get; set; }
-        public IdentityUser User { get; set; }
+        public ASL User { get; set; }
         public int Length { get; set; }
         public string HairColor  { get; set; }
 
