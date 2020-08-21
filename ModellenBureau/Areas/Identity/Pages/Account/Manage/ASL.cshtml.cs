@@ -53,49 +53,49 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
             public string City { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
-        {
-            var userName = await _userManager.GetUserNameAsync(user);
+        //private async Task LoadAsync(IdentityUser user)
+        //{
+        //    var userName = await _userManager.GetUserNameAsync(user);
 
-            Username = userName;
+        //    Username = userName;
 
-            Input = new InputModel
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Age = age,
-                Street = street,
-                ZipCode = zipCode,
-                HouseNumber = houseNumber,
-                City = city
-            };
-        }
+        //    Input = new InputModel
+        //    {
+        //        FirstName = firstName,
+        //        LastName = lastName,
+        //        Age = age,
+        //        Street = street,
+        //        ZipCode = zipCode,
+        //        HouseNumber = houseNumber,
+        //        City = city
+        //    };
+        //}
 
-        public async Task<IActionResult> OnGetAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+        //public async Task<IActionResult> OnGetAsync()
+        //{
+        //    var user = await _userManager.GetUserAsync(User);
+        //    if (user == null)
+        //    {
+        //        return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+        //    }
 
-            await LoadAsync(user);
-            return Page();
-        }
+        //    await LoadAsync(user);
+        //    return Page();
+        //}
 
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+            //if (user == null)
+            //{
+            //    return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            //}
 
-            if (!ModelState.IsValid)
-            {
-                await LoadAsync(user);
-                return Page();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    await LoadAsync(user);
+            //    return Page();
+            //}
 
             var CustomerAsl = await _userManager.GetUserNameAsync(user);
             if (Input != Input)
