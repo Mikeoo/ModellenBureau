@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -58,60 +60,58 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
             public string City { get; set; }
         }
 
-        //private async Task LoadAsync(IdentityUser user)
-        //{
-        //    var userName = await _userManager.GetUserNameAsync(user);
+        private async Task LoadAsync(ASL user)
+        {
+            var CurrentLog = await _userManager.GetUserAsync(User);
 
-        //    Username = userName;
+            Input = new InputModel
+            {
+               FirstName = CurrentLog.FirstName,
+               LastName = CurrentLog.LastName,
+               Age = CurrentLog.Age,
+               Street = CurrentLog.Street,
+               ZipCode = CurrentLog.ZipCode,
+               HouseNumber = CurrentLog.HouseNumber,
+               City = CurrentLog.City
+            };
+        }
 
-        //    Input = new InputModel
-        //    {
-        //        FirstName = firstName,
-        //        LastName = lastName,
-        //        Age = age,
-        //        Street = street,
-        //        ZipCode = zipCode,
-        //        HouseNumber = houseNumber,
-        //        City = city
-        //    };
-        //}
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
 
-        //public async Task<IActionResult> OnGetAsync()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    await LoadAsync(user);
-        //    return Page();
-        //}
+            await LoadAsync(user);
+            return Page();
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            //if (user == null)
-            //{
-            //    return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            //}
-
-            //if (!ModelState.IsValid)
-            //{
-            //    await LoadAsync(user);
-            //    return Page();
-            //}
-
-            var CustomerAsl = await _userManager.GetUserNameAsync(user);
-            if (Input != Input)
+            if (user == null)
             {
-                var setPhoneResult = await _userManager.SetUserNameAsync (user, Input.FirstName);
-                if (!setPhoneResult.Succeeded)
+                return NotFound($"Unable to load user'{_userManager.GetUserId(User)}'.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await LoadAsync(user);
+                return Page();
+            }
+
+            if (Input.FirstName != User.FirstName)
+            {
+                var SetASL = await _userManager.UpdateAsync(_db.Customers.Find(user).User);
+                if (!SetASL.Succeeded)
                 {
-                    StatusMessage = "Unexpected error.";
+                    StatusMessage = "Unexpected error when trying to set your ASL data.";
                     return RedirectToPage();
                 }
             }
+
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
