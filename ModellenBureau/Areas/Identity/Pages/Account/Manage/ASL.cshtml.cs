@@ -102,9 +102,17 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            if (Input.FirstName != User.FirstName)
+            if (Input.FirstName != user.FirstName || Input.FirstName == user.FirstName)
             {
-                var SetASL = await _userManager.UpdateAsync(_db.Customers.Find(user).User);
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.Age = Input.Age;
+                user.Street = Input.Street;
+                user.ZipCode = Input.ZipCode;
+                user.HouseNumber = Input.HouseNumber;
+                user.City = Input.City;
+
+                var SetASL = await _userManager.UpdateAsync(user);
                 if (!SetASL.Succeeded)
                 {
                     StatusMessage = "Unexpected error when trying to set your ASL data.";

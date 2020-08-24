@@ -7,7 +7,7 @@ using ModellenBureau.Models;
 
 namespace ModellenBureau.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ASL>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
