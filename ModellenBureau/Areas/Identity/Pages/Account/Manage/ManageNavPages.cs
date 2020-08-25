@@ -10,7 +10,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
     {
         public static string Index => "Index";
         public static string ASL => "ASL";
-
+        public static string Photos => "Photos";
 
         public static string Email => "Email";
 
@@ -28,7 +28,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
         public static string ASLNavClass(ViewContext viewContext) => PageNavClass(viewContext, ASL);
-
+        public static string PhotosNavClass(ViewContext viewContext) => PageNavClass(viewContext, Photos);
         public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);

@@ -74,8 +74,6 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Logo")]
             public AppFile Logo { get; set; }
             [Display(Name = "Photo's")]
-            public List<AppFile> Photos { get; set; }
-            [Display(Name = "Hair color")]
             public string HairColor { get; set; }
             [Display(Name = "Length")]
             public int Length { get; set; }
@@ -116,8 +114,6 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                     City = CurrentLog.City,
                     Length = ModelLog.Length,
                     HairColor = ModelLog.HairColor,
-                    Photos = ModelLog.Photos
-
                 };
             }
         }
@@ -170,7 +166,20 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                     CustomerLog.BTW = Input.BTW;
                     CustomerLog.Logo = new AppFile { UploadedContentString = Upload.FileName };
                 }
-
+                if (this.User.IsInRole("Model"))
+                {
+                    var ModelLog = _db.Models.FirstOrDefault(c => c.User.Id == user.Id);
+                    user.FirstName = Input.FirstName;
+                    user.LastName = Input.LastName;
+                    user.Age = Input.Age;
+                    user.Street = Input.Street;
+                    user.ZipCode = Input.ZipCode;
+                    user.HouseNumber = Input.HouseNumber;
+                    user.City = Input.City;
+                    ModelLog.HairColor = Input.HairColor;
+                    ModelLog.Length = Input.Length;
+                    //ModelLog.Photos = new List<AppFile>(Upload.FileName);
+                }
 
 
                 var SetASL = await _userManager.UpdateAsync(user);
