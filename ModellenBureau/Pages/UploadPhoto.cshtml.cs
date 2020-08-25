@@ -22,9 +22,8 @@ namespace ModellenBureau.Pages
         public IFormFile Upload { get; set; }
         public async Task OnPostAsync()
         {
-            var file = Path.Combine(_environment.ContentRootPath, "uploads", Upload.FileName);
-           // _environment.ContentRootPath + "/uploads/picture.jpg"
-            using (var fileStream = new FileStream(_environment.ContentRootPath + "/uploads/picture.jpg", FileMode.Create))
+            var file = Path.Combine(_environment.ContentRootPath, "uploads", Path.GetFileName(Upload.FileName));
+            using (var fileStream = new FileStream(file, FileMode.Create))
             {
                 await Upload.CopyToAsync(fileStream);
             }
