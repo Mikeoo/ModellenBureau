@@ -112,6 +112,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+
             if (userRole[0] == RoleNames.Customer)
             {
                 CustomerUser customerUser = (CustomerUser)await _userManager.GetUserAsync(User);
@@ -133,7 +134,6 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                 modelUser.LegLength = Input.ModelUser.LegLength;
 
                 var result = await _userManager.UpdateAsync(modelUser);
-
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
