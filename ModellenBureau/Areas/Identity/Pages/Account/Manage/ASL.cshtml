@@ -37,8 +37,52 @@
             <label asp-for="Input.City"></label>
             <input asp-for="Input.City" class="form-control" />
         </div>
+        @if (this.User.IsInRole("Customer"))
+        {
+            <div class="form-group">
+                <label asp-for="Input.KvK"></label>
+                <input asp-for="Input.KvK" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.BTW"></label>
+                <input asp-for="Input.BTW" class="form-control" />
+            </div>
+        }
         <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
     </form>
+    <form action="BufferedSingleFileUploadPhysical/?handler=Upload"
+          enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"
+          method="post">
+        <dl>
+            <dt>
+                <label for="FileUpload_FormFile">File</label>
+            </dt>
+            <dd>
+                <input id="FileUpload_FormFile" type="file"
+                       name="FileUpload.FormFile" />
+            </dd>
+        </dl>
+
+        <input class="btn" type="submit" value="Upload" />
+
+        <div style="margin-top:15px">
+            <output name="result"></output>
+        </div>
+    </form>
+
+    <script>
+        "use strict";
+
+        function AJAXSubmit(oFormElement) {
+            var oReq = new XMLHttpRequest();
+            oReq.onload = function (e) {
+                oFormElement.elements.namedItem("result").value =
+                    'Result: ' + this.status + ' ' + this.statusText;
+            };
+            oReq.open("post", oFormElement.action);
+            oReq.send(new FormData(oFormElement));
+        }
+    </script>
 </div>
 
 @section Scripts {

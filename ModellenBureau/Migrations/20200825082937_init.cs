@@ -39,7 +39,14 @@ namespace ModellenBureau.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Age = table.Column<int>(nullable: false),
+                    Street = table.Column<string>(nullable: true),
+                    ZipCode = table.Column<string>(nullable: true),
+                    HouseNumber = table.Column<int>(nullable: false),
+                    City = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -158,16 +165,9 @@ namespace ModellenBureau.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Age = table.Column<int>(nullable: false),
-                    Street = table.Column<string>(nullable: true),
-                    ZipCode = table.Column<string>(nullable: true),
-                    HouseNumber = table.Column<int>(nullable: false),
-                    City = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
                     KvK = table.Column<int>(nullable: false),
-                    BTW = table.Column<int>(nullable: false),
+                    BTW = table.Column<string>(nullable: true),
                     Logo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -187,13 +187,6 @@ namespace ModellenBureau.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Age = table.Column<int>(nullable: false),
-                    Street = table.Column<string>(nullable: true),
-                    ZipCode = table.Column<string>(nullable: true),
-                    HouseNumber = table.Column<int>(nullable: false),
-                    City = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
                     Length = table.Column<int>(nullable: false),
                     HairColor = table.Column<string>(nullable: true)

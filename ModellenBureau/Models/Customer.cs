@@ -11,7 +11,7 @@ namespace ModellenBureau.Models
         public int Id { get; set; }
         public ASL User { get; set; }
         public int KvK { get; set; }
-        public int BTW { get; set; }
-        public string Logo { get; set; }
+        public string BTW { get; set; }
+        public AppFile Logo { get; set; }
     }
 }

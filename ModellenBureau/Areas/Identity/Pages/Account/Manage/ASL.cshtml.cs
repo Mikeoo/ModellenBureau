@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +14,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using ModellenBureau.Data;
+using System.Web;
+using System.Net;
 using ModellenBureau.Models;
 
 
@@ -58,22 +62,52 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
             public int HouseNumber { get; set; }
             [Display(Name = "City")]
             public string City { get; set; }
+            [Display(Name = "KvK Number")]
+            public int KvK { get; set; }
+            [Display(Name = "BTW Number")]
+            public string BTW { get; set; }
+            [Display(Name = "Logo")]
+            public IFormFile Logo { get; set; }
         }
 
         private async Task LoadAsync(ASL user)
         {
             var CurrentLog = await _userManager.GetUserAsync(User);
-
-            Input = new InputModel
+            if (this.User.IsInRole("Customer"))
             {
-               FirstName = CurrentLog.FirstName,
-               LastName = CurrentLog.LastName,
-               Age = CurrentLog.Age,
-               Street = CurrentLog.Street,
-               ZipCode = CurrentLog.ZipCode,
-               HouseNumber = CurrentLog.HouseNumber,
-               City = CurrentLog.City
-            };
+                var CustomerLog = _db.Customers.FirstOrDefault(c => c.User.Id == user.Id);
+                Input = new InputModel
+                {
+                    FirstName = CurrentLog.FirstName,
+                    LastName = CurrentLog.LastName,
+                    Age = CurrentLog.Age,
+                    Street = CurrentLog.Street,
+                    ZipCode = CurrentLog.ZipCode,
+                    HouseNumber = CurrentLog.HouseNumber,
+                    City = CurrentLog.City,
+                    KvK = CustomerLog.KvK,
+                    BTW = CustomerLog.BTW,
+                    //Logo = CustomerLog.Logo
+                };
+            }
+        }
+        public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
+        {
+            long size = files.Sum(f => f.Length);
+
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    var filePath = Path.GetTempFileName();
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                }
+            }
+            return RedirectToPage(new { count = files.Count, size });
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -101,16 +135,24 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
-
+            
             if (Input.FirstName != user.FirstName || Input.FirstName == user.FirstName)
             {
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
-                user.Age = Input.Age;
-                user.Street = Input.Street;
-                user.ZipCode = Input.ZipCode;
-                user.HouseNumber = Input.HouseNumber;
-                user.City = Input.City;
+                if (this.User.IsInRole("Customer"))
+                {
+                    var CustomerLog = _db.Customers.FirstOrDefault(c => c.User.Id == user.Id);
+                    user.FirstName = Input.FirstName;
+                    user.LastName = Input.LastName;
+                    user.Age = Input.Age;
+                    user.Street = Input.Street;
+                    user.ZipCode = Input.ZipCode;
+                    user.HouseNumber = Input.HouseNumber;
+                    user.City = Input.City;
+                    CustomerLog.KvK = Input.KvK;
+                    CustomerLog.BTW = Input.BTW;
+                }
+
+
 
                 var SetASL = await _userManager.UpdateAsync(user);
                 if (!SetASL.Succeeded)
