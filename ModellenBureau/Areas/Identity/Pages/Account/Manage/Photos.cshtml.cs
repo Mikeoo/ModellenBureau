@@ -34,10 +34,6 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
             _environment = environment;
         }
 
-        public void OnGet()
-        {
-        }
-
         [BindProperty]
         public InputModel Input { get; set; }
         [BindProperty]
@@ -68,6 +64,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                 };
             }
         }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -79,6 +76,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
             await LoadAsync(user);
             return Page();
         }
+
         public async Task<IActionResult> OnPostAsync()
         {
             var file = Path.Combine(_environment.ContentRootPath, "uploads", Upload.FileName);

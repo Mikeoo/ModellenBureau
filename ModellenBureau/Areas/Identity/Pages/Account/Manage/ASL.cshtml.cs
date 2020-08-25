@@ -132,12 +132,6 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var file = Path.Combine(_environment.ContentRootPath, "uploads", Upload.FileName);
-            using (var fileStream = new FileStream(file, FileMode.Create))
-            {
-                await Upload.CopyToAsync(fileStream);
-            }
-
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -164,7 +158,6 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                     user.City = Input.City;
                     CustomerLog.KvK = Input.KvK;
                     CustomerLog.BTW = Input.BTW;
-                    CustomerLog.Logo = new AppFile { UploadedContentString = Upload.FileName };
                 }
                 if (this.User.IsInRole("Model"))
                 {
@@ -178,7 +171,6 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                     user.City = Input.City;
                     ModelLog.HairColor = Input.HairColor;
                     ModelLog.Length = Input.Length;
-                    //ModelLog.Photos = new List<AppFile>(Upload.FileName);
                 }
 
 
