@@ -17,26 +17,28 @@ using ModellenBureau.Data;
 using System.Web;
 using System.Net;
 using ModellenBureau.Models;
-
+using Microsoft.AspNetCore.Hosting;
 
 namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
 {
     public class ASLModel : PageModel
     {
-
         private readonly UserManager<ASL> _userManager;
         private readonly SignInManager<ASL> _signInManager;
         private readonly ApplicationDbContext _db;
+        private IWebHostEnvironment _environment;
 
-        
         public ASLModel(
             UserManager<ASL> userManager,
             SignInManager<ASL> signInManager,
-            ApplicationDbContext db)
+            ApplicationDbContext db,
+            IWebHostEnvironment environment)
+
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _db = db;
+            _environment = environment;
         }
 
 
@@ -45,6 +47,9 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
         public string Username { get; private set; }
         [BindProperty]
         public InputModel Input { get; set; }
+
+        [BindProperty]
+        public IFormFile Upload { get; set; }
 
         public class InputModel
         {
@@ -67,7 +72,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
             [Display(Name = "BTW Number")]
             public string BTW { get; set; }
             [Display(Name = "Logo")]
-            public IFormFile Logo { get; set; }
+            public AppFile Logo { get; set; }
         }
 
         private async Task LoadAsync(ASL user)
@@ -75,7 +80,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
             var CurrentLog = await _userManager.GetUserAsync(User);
             if (this.User.IsInRole("Customer"))
             {
-                var CustomerLog = _db.Customers.FirstOrDefault(c => c.User.Id == user.Id);
+                var CustomerLog = _db.Customers.Include("Logo").FirstOrDefault(c => c.User.Id == user.Id);
                 Input = new InputModel
                 {
                     FirstName = CurrentLog.FirstName,
@@ -87,29 +92,11 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                     City = CurrentLog.City,
                     KvK = CustomerLog.KvK,
                     BTW = CustomerLog.BTW,
-                    //Logo = CustomerLog.Logo
+                    Logo = CustomerLog.Logo
                 };
             }
         }
-        public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
-        {
-            long size = files.Sum(f => f.Length);
-
-            foreach (var formFile in files)
-            {
-                if (formFile.Length > 0)
-                {
-                    var filePath = Path.GetTempFileName();
-
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-                }
-            }
-            return RedirectToPage(new { count = files.Count, size });
-        }
-
+        
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -124,6 +111,12 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var file = Path.Combine(_environment.ContentRootPath, "uploads", Upload.FileName);
+            using (var fileStream = new FileStream(file, FileMode.Create))
+            {
+                await Upload.CopyToAsync(fileStream);
+            }
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -150,6 +143,7 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                     user.City = Input.City;
                     CustomerLog.KvK = Input.KvK;
                     CustomerLog.BTW = Input.BTW;
+                    CustomerLog.Logo = new AppFile { UploadedContentString = Upload.FileName };
                 }
 
 

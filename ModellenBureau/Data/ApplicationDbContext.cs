@@ -15,7 +15,6 @@ namespace ModellenBureau.Data
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Model> Models { get; set; }
-
-
+        public DbSet<AppFile> AppFiles { get; set; }
     }
 }

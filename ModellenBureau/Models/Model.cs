@@ -12,6 +12,6 @@ namespace ModellenBureau.Models
         public ASL User { get; set; }
         public int Length { get; set; }
         public string HairColor  { get; set; }
-        public AppFile Photo { get; set; }
+        public List<AppFile> Photos { get; set; }
     }
 }

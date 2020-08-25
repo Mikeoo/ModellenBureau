@@ -247,12 +247,17 @@ namespace ModellenBureau.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<int?>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UploadedContentString")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppFile");
+                    b.HasIndex("ModelId");
+
+                    b.ToTable("AppFiles");
                 });
 
             modelBuilder.Entity("ModellenBureau.Models.Customer", b =>
@@ -296,15 +301,10 @@ namespace ModellenBureau.Migrations
                     b.Property<int>("Length")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PhotoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PhotoId");
 
                     b.HasIndex("UserId");
 
@@ -362,6 +362,13 @@ namespace ModellenBureau.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ModellenBureau.Models.AppFile", b =>
+                {
+                    b.HasOne("ModellenBureau.Models.Model", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("ModelId");
+                });
+
             modelBuilder.Entity("ModellenBureau.Models.Customer", b =>
                 {
                     b.HasOne("ModellenBureau.Models.AppFile", "Logo")
@@ -375,10 +382,6 @@ namespace ModellenBureau.Migrations
 
             modelBuilder.Entity("ModellenBureau.Models.Model", b =>
                 {
-                    b.HasOne("ModellenBureau.Models.AppFile", "Photo")
-                        .WithMany()
-                        .HasForeignKey("PhotoId");
-
                     b.HasOne("ModellenBureau.Models.ASL", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
