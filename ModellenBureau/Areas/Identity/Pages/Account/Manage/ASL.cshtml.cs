@@ -73,6 +73,13 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
             public string BTW { get; set; }
             [Display(Name = "Logo")]
             public AppFile Logo { get; set; }
+            [Display(Name = "Photo's")]
+            public List<AppFile> Photos { get; set; }
+            [Display(Name = "Hair color")]
+            public string HairColor { get; set; }
+            [Display(Name = "Length")]
+            public int Length { get; set; }
+
         }
 
         private async Task LoadAsync(ASL user)
@@ -93,6 +100,24 @@ namespace ModellenBureau.Areas.Identity.Pages.Account.Manage
                     KvK = CustomerLog.KvK,
                     BTW = CustomerLog.BTW,
                     Logo = CustomerLog.Logo
+                };
+            }
+            if (this.User.IsInRole("Model"))
+            {
+                var ModelLog = _db.Models.Include("Photos").FirstOrDefault(c => c.User.Id == user.Id);
+                Input = new InputModel
+                {
+                    FirstName = CurrentLog.FirstName,
+                    LastName = CurrentLog.LastName,
+                    Age = CurrentLog.Age,
+                    Street = CurrentLog.Street,
+                    ZipCode = CurrentLog.ZipCode,
+                    HouseNumber = CurrentLog.HouseNumber,
+                    City = CurrentLog.City,
+                    Length = ModelLog.Length,
+                    HairColor = ModelLog.HairColor,
+                    Photos = ModelLog.Photos
+
                 };
             }
         }

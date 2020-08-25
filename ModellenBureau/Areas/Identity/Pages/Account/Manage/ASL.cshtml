@@ -48,6 +48,21 @@
                 <input asp-for="Input.BTW" class="form-control" />
             </div>
         }
+        @if (this.User.IsInRole("Model"))
+        {
+            <div class="form-group">
+                <label asp-for="Input.Length"></label>
+                <input asp-for="Input.Length" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.HairColor"></label>
+                <input asp-for="Input.HairColor" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Photos"></label>
+                <input asp-for="Input.Photos" class="form-control" />
+            </div>
+        }
         <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
     </form>
     <div class="text-center">
