@@ -25,16 +25,16 @@ namespace ModellenBureau.Areas.Identity.Pages.Account
     public class RegisterModel : PageModel
     {
 
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ASL> _signInManager;
+        private readonly UserManager<ASL> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _db;
         public List<SelectListItem> Options { get; set; }
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ASL> userManager,
+            SignInManager<ASL> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ApplicationDbContext db)
@@ -160,7 +160,21 @@ namespace ModellenBureau.Areas.Identity.Pages.Account
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     await _userManager.AddToRoleAsync(user, userRole);
-
+                    // creating model with new account
+                    if (userRole == "Customer")
+                    {
+                        Customer newCustomer = new Customer();
+                        newCustomer.User = user;
+                        _db.Customers.Add(newCustomer);
+                        _db.SaveChanges();
+                    }
+                    if (userRole == "Model")
+                    {
+                        Model newModel = new Model();
+                        newModel.User = user;
+                        _db.Models.Add(newModel);
+                        _db.SaveChanges();
+                    }
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
